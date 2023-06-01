@@ -26,7 +26,6 @@ export default function OptionUtilisateur() {
 
         <Button title="modifier mes informations" onPress={() => alert('Changer de mot de passe')} />
         <Button title="Se déconnecter" onPress={() => alert('Se déconnecter')} />
-
               <StatusBar style="auto" />
     </View>
   );
