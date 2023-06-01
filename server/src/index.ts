@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import { Database  } from 'sqlite3';
 
 const PORT = 19001;
 
 const app = express();
+
+const db = new Database('database.sqlite');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
