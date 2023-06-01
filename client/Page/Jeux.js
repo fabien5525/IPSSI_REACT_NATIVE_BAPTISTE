@@ -27,18 +27,28 @@ export default function Jeux() {
         console.log(levelAct);
     }
 
-    const renderLevelUnlock = ({ item }) => (
-            
-        <Pressable onPress={() => handleGoToLevel(item)} style={styles.level}>
-          <View style={styles.cardContainer}>
-            <Image source={{ uri: item.image }} style={styles.thumbnailImage} />
-            <View style={styles.userInfoContainer}>
-              <Text style={styles.nameText}>{item.name}</Text>
+    const renderLevelUnlock = ({ item }) => {
+        return item.unlock ? (
+          <Pressable onPress={() => handleGoToLevel(item)} style={styles.level}>
+            <View style={styles.cardContainer}>
+              <Image source={{ uri: item.image }} style={styles.thumbnailImage} />
+              <View style={styles.userInfoContainer}>
+                <Text style={styles.nameText}>{item.name}</Text>
+              </View>
+            </View>
+          </Pressable>
+        ) : (
+          <View style={styles.level}>
+            <View style={styles.cardContainer}>
+              <Image source={require("../assets/lock.webp")} style={styles.thumbnailImage} />
+              <View style={styles.userInfoContainer}>
+                <Text style={styles.nameText}>Niveau verouillé</Text>
+              </View>
             </View>
           </View>
-        </Pressable>
-      );
-    
+        );
+      };
+      
 
   return (
     <View style={styles.container}>
@@ -49,7 +59,6 @@ export default function Jeux() {
               data={allevel}
               renderItem={renderLevelUnlock}
               keyExtractor={(item) => item.id.toString()}/>
-
         </View>
       <StatusBar style="auto" />
     </View>
