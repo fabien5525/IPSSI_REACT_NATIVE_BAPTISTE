@@ -1,12 +1,13 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database";
 import User from "./user";
+import GameEvent from "./gameEvent";
+import Event from "./event";
 
 class Game extends Model {
     declare id: number;
     declare status: 'inProgress' | 'finished';
     declare userId: number;
-    declare events: Event[];
     declare stats: {
         health: number;
         strength: number;
@@ -21,6 +22,25 @@ class Game extends Model {
                 id: this.userId
             }
         }) : null;
+    }
+
+    private events = async (): Promise<Event[]> => {
+        const gameEvents: GameEvent[] = await GameEvent.findAll({
+            where: {
+                gameId: this.id
+            }
+        });
+        const events = await Promise.all(gameEvents.map(async (gameEvent) => {
+            const event = await gameEvent.event();
+            return event ?? null;
+        }));
+        const sortedEvents : Event[] = [];
+        events.forEach((event) => {
+            if (event) {
+                sortedEvents.push(event);
+            }
+        });
+        return sortedEvents;
     }
 }
 
@@ -38,20 +58,6 @@ Game.init({
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    events: {
-        type: DataTypes.JSON,
-        allowNull: false,
-        get() {
-            const rawValue = this.getDataValue('events');
-            if (!rawValue) {
-                return [];
-            }
-            return JSON.parse(rawValue)
-        },
-        set(value: Event[]) {
-            this.setDataValue('events', JSON.stringify(value));
-        }
     },
     stats: {
         type: DataTypes.JSON,

@@ -9,7 +9,14 @@
     "dev": "nodemon --watch src --ext ts --exec npm run dev-start",
     "dev-start": "npm run build && node dist/index.js",
     "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --copy-files",
-    "clean": "node -e \"const fs = require('fs-extra'); if (fs.existsSync('dist')) fs.removeSync('dist')\""
+    "clean": "node -e \"const fs = require('fs-extra'); if (fs.existsSync('dist')) fs.removeSync('dist')\"",
+    "sequelize": "sequelize",
+    "s": "sequelize",
+    "s:m": "npm run sequelize -- db:migrate",
+    "s:m:c": "npm run sequelize -- migration:create --name",
+    "s:m:u": "npm run sequelize -- db:migrate:undo",
+    "s:s": "npm run sequelize -- db:seed:all",
+    "s:s:u": "npm run sequelize -- db:seed:undo:all"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +26,7 @@
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "sequelize": "^6.31.1",
+    "sequelize-cli": "^6.6.0",
     "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.2",

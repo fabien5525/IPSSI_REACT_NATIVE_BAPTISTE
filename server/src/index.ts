@@ -1,20 +1,22 @@
 import express from 'express';
 import cors from 'cors';
-import { Database  } from 'sqlite3';
 
 const PORT = 19001;
 
 const app = express();
 
-const db = new Database('database.sqlite');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+app.post('/login', async (req, res) => {
+    console.log("POST /login");
+    res.status(401).send({ message: 'OK' });
+});
+
 app.get('*', async (req, res) => {
     console.log("GET *");
-    res.status(404).send({ error: 'not found' });
+    res.status(404).send({ message: 'Not found' });
 });
 
 app.listen(PORT, () => {
