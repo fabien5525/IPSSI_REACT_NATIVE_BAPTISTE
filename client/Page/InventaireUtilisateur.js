@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-
+    width:"95%",
     margin: 10,
   },
   text: {
