@@ -1,5 +1,5 @@
 {
-  "secret": "NFONQSNQOSKNQSOIKSNSQOSKNQSOKNFQSOLQKN",
+  "secret": "",
   "development": {
     "dialect": "sqlite",
     "storage": "./database.sqlite"
