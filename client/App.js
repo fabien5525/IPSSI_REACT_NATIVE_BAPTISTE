@@ -8,11 +8,30 @@ import Jeux from './Page/Jeux';
 import InventaireUtilisateur from './Page/InventaireUtilisateur';
 import HistoriquePartie from './Page/HistoriquePartie';
 import { useState } from 'react';
+import Connexion from './Page/Connexion';
+import Inscription from './Page/Inscription';
 
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+const PageInscrisptionConnexion = () => {
+  return(
+  <Stack.Navigator
+  
+  >
+    <Stack.Screen name="Connexion" component={Connexion} initialParams={Connexion} 
+                options={{
+                  headerShown: false,
+                }}
+    />
+    <Stack.Screen name="Inscription" component={Inscription} 
+                    options={{
+                      headerShown: false,
+                    }}/>
+  </Stack.Navigator>)
+}
 
 const PagePrincipale = () => {
 
@@ -53,7 +72,6 @@ const PagePrincipale = () => {
   const Option = () => {
     return (
       <Stack.Navigator
-      
       >
         <Stack.Screen name="Option" component={OptionUtilisateur} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />
@@ -61,82 +79,50 @@ const PagePrincipale = () => {
     );
   };
 export default function App() {
-  const [showModal, setShowModal] = useState(true); // State to control the visibility of the modal
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  // Function to toggle the modal
-  const VerificationLogin = () => {
-    fetch('http://5525.fr:19001/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    })
-    .then((response) => {
-      const json = response.json();
-      if(response.status == 200) {
-        console.log(json);
-      setShowModal(false);
-      } else {
-        alert('Identifiant ou mot de passe incorrect')
-      }
-    })
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <NavigationContainer>
-      {showModal ? (
-        <Modal visible={showModal} animationType="slide">
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>Identifiant</Text>
-            <TextInput 
-            placeholder="Username"
-            style={styles.modalInput} 
-            onChangeText={(text) => setUsername(text)}
-            />
-
-            <Text style={styles.modalText}>Mot de passe</Text>
-            <TextInput 
-            placeholder="Password" 
-            style={styles.modalInput} 
-            onChangeText={(text) => setPassword(text)}
-            />
-
-            <Button title="Se connecter" style={styles.modalButton} onPress={() => VerificationLogin()}/>
-          </View>
-        </Modal>
-      ) : (
+      {isLoggedIn ? (
         <PagePrincipale />
+      ) : (
+        <Stack.Navigator >
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="InscriptionConnexion"
+            component={PageInscrisptionConnexion}
+          />
+        </Stack.Navigator>
       )}
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalText: {
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  modalInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
-    width: '80%',
-    borderRadius: 5,
-  },
-});
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    modalContainer: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    modalText: {
+      fontSize: 20,
+      marginBottom: 10,
+    },
+    modalInput: {
+      borderWidth: 1,
+      borderColor: '#ccc',
+      padding: 10,
+      marginBottom: 10,
+      width: '80%',
+      borderRadius: 5,
+    },
+  });
