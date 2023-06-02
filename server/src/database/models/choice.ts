@@ -3,6 +3,7 @@ import sequelize from "../database";
 
 class Choice extends Model {
     declare id: number;
+    declare eventId: number;
     declare title: string;
     declare effect: {
         title: string;
@@ -20,6 +21,10 @@ Choice.init({
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
+    },
+    eventId: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     title: {

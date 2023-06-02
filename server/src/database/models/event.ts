@@ -6,11 +6,10 @@ import Game from "./game";
 
 class Event extends Model {
     declare id: number;
-    declare type: string;
     declare title: string;
+    declare type: string;
     declare description: string;
     declare level: number;
-    declare choices: Choice[];
     declare readonly createdAt: Date;
     declare readonly updateAt: Date;
 
@@ -31,6 +30,15 @@ class Event extends Model {
             }
         });
         return sortedGames;
+    }
+
+    public choices = async (): Promise<Choice[]> => {
+        const choices: Choice[] = await Choice.findAll({
+            where: {
+                eventId: this.id
+            }
+        });
+        return choices;
     }
 }
 

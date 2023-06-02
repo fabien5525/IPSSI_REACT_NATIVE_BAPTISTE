@@ -43,32 +43,6 @@ module.exports = {
       }
     });
 
-    await queryInterface.createTable('choice', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      title: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      },
-      effect: {
-        type: Sequelize.JSON,
-        allowNull: false
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      }
-    });
-
     await queryInterface.createTable('event', {
       id: {
         type: Sequelize.INTEGER,
@@ -92,6 +66,40 @@ module.exports = {
         allowNull: false
       },
       choices: {
+        type: Sequelize.JSON,
+        allowNull: false
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    await queryInterface.createTable('choice', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      eventId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'event',
+          key: 'id'
+        }
+      },
+      title: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      effect: {
         type: Sequelize.JSON,
         allowNull: false
       },
