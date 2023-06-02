@@ -27,37 +27,61 @@ export default function Jeux({ navigation }) {
   }
 
   const renderLevelUnlock = ({ item }) => {
-    return item.unlock ? (
-      <Pressable onPress={() => handleGoToLevel(item)} style={styles.level}>
-        <View style={styles.cardContainer}>
-          <Image source={{ uri: item.image }} style={styles.thumbnailImage} />
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.nameText}>{item.name}</Text>
-          </View>
+    return (
+      <Pressable onPress={() => item.unlock && handleGoToLevel(item)}>
+        <View style={{
+          //vue for a card
+          flex: 1,
+          width: 300,
+          height: 100,
+          margin: 10,
+          padding: 10,
+          backgroundColor: item.unlock ? '#ccc' : '#aaa',
+          borderRadius: 25,
+          //flex directtion row
+          flexDirection: 'row',
+        }}>
+          <Image
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 25
+            }}
+            source={item.unlock ? { uri: item.image } : require("../assets/lock.webp")}
+          />
+          <Text style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginTop: 30,
+            marginLeft: 20,
+
+          }}>{item.name}</Text>
         </View>
       </Pressable>
-    ) : (
-      <View style={styles.level}>
-        <View style={styles.cardContainer}>
-          <Image source={require("../assets/lock.webp")} style={styles.thumbnailImage} />
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.nameText}>Niveau verouillé</Text>
-          </View>
-        </View>
-      </View>
-    );
+    )
   };
 
-
   return (
-    <View style={styles.container}>
-      <Text>Niveau {max}</Text>
-      <View style={styles.leveldesign}>
-
+    <View style={{
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 50,
+    }}>
+      <Text style={{
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+      }}>Niveau {max}</Text>
+      <View>
         <FlatList
           data={allevel}
           renderItem={renderLevelUnlock}
-          keyExtractor={(item) => item.id.toString()} />
+          keyExtractor={(item) => item.id.toString()}
+        />
       </View>
       <StatusBar style="auto" />
     </View>
@@ -65,50 +89,5 @@ export default function Jeux({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  leveldesign: {
-    flex: 1,
-    width: '90%',
-    backgroundColor: '#d7c2c2',
-  },
-  bouton: {
-    flex: 1,
-    width: '90%',
-    backgroundColor: '#d7c2c2',
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: 'white',
-  },
-  thumbnailImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 40, // Pour obtenir une image ronde
-    marginRight: 16,
-  },
-  userInfoContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  nameText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  level: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    marginBottom: 10,
-  },
+
 });

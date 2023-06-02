@@ -1,8 +1,8 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../database";
-import User from "./user";
-import GameEvent from "./gameEvent";
-import Event from "./event";
+import sequelize from "@database/database";
+import User from "@models/User";
+import GameEvent from "@models/GameEvent";
+import Event from "@models/Event";
 
 class Game extends Model {
     declare id: number;
@@ -34,7 +34,7 @@ class Game extends Model {
             const event = await gameEvent.event();
             return event ?? null;
         }));
-        const sortedEvents : Event[] = [];
+        const sortedEvents: Event[] = [];
         events.forEach((event) => {
             if (event) {
                 sortedEvents.push(event);

@@ -10,6 +10,20 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "baseUrl": "./",
+        "paths": {
+            "@controllers/*": [
+                "src/controllers/*"
+            ],
+            "@database/*": [
+                "src/database/*"
+            ],
+            "@models/*": [
+                "src/database/models/*"
+            ],
+            "@config/*": [
+                "config/*"
+            ],
+        }
     },
     "include": [
         "src/**/*.ts"
