@@ -12,6 +12,7 @@ import Connexion from './Page/Connexion';
 import Inscription from './Page/Inscription';
 import { useEffect } from 'react';
 import GestionEvent from './Page/GestionEvent';
+import Niveau from './Page/Niveau';
 
 
 
@@ -46,9 +47,10 @@ const PagePrincipale = () => {
   return (
     <Tab.Navigator>
     <Tab.Screen 
-    name="Jeux" 
-    component={Jeux} 
+    name="NiveauJeu" 
+    component={NiveauJeu} 
     options={{
+      headerShown: false,
       tabBarIcon: ({ color, size }) => (
         <Image source={require("./assets/joystick.png")} style={{ width: size, height: size, tintColor: color }} />
       ),
@@ -76,6 +78,15 @@ const PagePrincipale = () => {
     </Tab.Navigator>
   )};
 
+  const NiveauJeu = () => {
+    return (
+      <Stack.Navigator
+      >
+        <Stack.Screen name="Jeux" component={Jeux} />
+        <Stack.Screen name="Niveau" component={Niveau} />
+      </Stack.Navigator>
+
+        )}
 
   const Option = () => {
     return (

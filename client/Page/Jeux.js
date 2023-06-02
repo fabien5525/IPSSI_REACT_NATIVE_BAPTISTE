@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View , Button, Pressable, FlatList, Image } from 'react-native';
 
-export default function Jeux() {
+export default function Jeux({navigation}) {
     const [max, setMax] = useState(1);
 
     const [level, setLevel] = useState([]);
@@ -24,8 +24,7 @@ export default function Jeux() {
         ])
   
     const handleGoToLevel = (levelAct) => {
-        console.log(levelAct);
-    }
+      navigation.navigate('Niveau', levelAct );    }
 
     const renderLevelUnlock = ({ item }) => {
         return item.unlock ? (

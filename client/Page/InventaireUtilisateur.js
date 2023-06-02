@@ -4,7 +4,7 @@ import { StyleSheet, Text, View,Image } from 'react-native';
 export default function InventaireUtilisateur() {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require('../assets/bag.png')}resizeMode="contain" />
+      <Image style={styles.image} source={require('../assets/ad.jpg')}resizeMode="contain" />
       <StatusBar style="auto" />
       <View style={styles.container}>
         <View style={styles.row}>
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width:"95%",
-    margin: 10,
-  },
+    borderRadius: 1000,
+    width:"90%",
+    height:"50%",  },
   text: {
     color: 'black',
     fontSize: 16,
