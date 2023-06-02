@@ -1,64 +1,64 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View , Button, Pressable, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, FlatList, Image } from 'react-native';
 
-export default function Jeux({navigation}) {
-    const [max, setMax] = useState(1);
+export default function Jeux({ navigation }) {
+  const [max, setMax] = useState(1);
 
-    const [level, setLevel] = useState([]);
+  const [level, setLevel] = useState([]);
 
-    const [allevel, setAllevel] = useState(
-        [
-            {
-                id: 1,
-                name: 'Niveau 1',
-                image: 'https://picsum.photos/200/300',
-                unlock: true,
-            },
-            {
-                id: 2,
-                name: 'Niveau 2',
-                image: 'https://picsum.photos/200/300',
-                unlock: false,
-            },
-        ])
-  
-    const handleGoToLevel = (levelAct) => {
-      navigation.navigate('Niveau', levelAct );    }
+  const [allevel, setAllevel] = useState([
+    {
+      id: 1,
+      name: 'Niveau 1',
+      image: 'https://picsum.photos/200/300',
+      unlock: true,
+    },
+    {
+      id: 2,
+      name: 'Niveau 2',
+      image: 'https://picsum.photos/200/300',
+      unlock: false,
+    },
+  ])
 
-    const renderLevelUnlock = ({ item }) => {
-        return item.unlock ? (
-          <Pressable onPress={() => handleGoToLevel(item)} style={styles.level}>
-            <View style={styles.cardContainer}>
-              <Image source={{ uri: item.image }} style={styles.thumbnailImage} />
-              <View style={styles.userInfoContainer}>
-                <Text style={styles.nameText}>{item.name}</Text>
-              </View>
-            </View>
-          </Pressable>
-        ) : (
-          <View style={styles.level}>
-            <View style={styles.cardContainer}>
-              <Image source={require("../assets/lock.webp")} style={styles.thumbnailImage} />
-              <View style={styles.userInfoContainer}>
-                <Text style={styles.nameText}>Niveau verouillé</Text>
-              </View>
-            </View>
+  const handleGoToLevel = (levelAct) => {
+    navigation.navigate('Niveau', levelAct);
+  }
+
+  const renderLevelUnlock = ({ item }) => {
+    return item.unlock ? (
+      <Pressable onPress={() => handleGoToLevel(item)} style={styles.level}>
+        <View style={styles.cardContainer}>
+          <Image source={{ uri: item.image }} style={styles.thumbnailImage} />
+          <View style={styles.userInfoContainer}>
+            <Text style={styles.nameText}>{item.name}</Text>
           </View>
-        );
-      };
-      
+        </View>
+      </Pressable>
+    ) : (
+      <View style={styles.level}>
+        <View style={styles.cardContainer}>
+          <Image source={require("../assets/lock.webp")} style={styles.thumbnailImage} />
+          <View style={styles.userInfoContainer}>
+            <Text style={styles.nameText}>Niveau verouillé</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
 
   return (
     <View style={styles.container}>
       <Text>Niveau {max}</Text>
       <View style={styles.leveldesign}>
 
-      <FlatList
-              data={allevel}
-              renderItem={renderLevelUnlock}
-              keyExtractor={(item) => item.id.toString()}/>
-        </View>
+        <FlatList
+          data={allevel}
+          renderItem={renderLevelUnlock}
+          keyExtractor={(item) => item.id.toString()} />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -104,11 +104,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-    level: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-        marginBottom: 10,
-    },
+  level: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    marginBottom: 10,
+  },
 });
