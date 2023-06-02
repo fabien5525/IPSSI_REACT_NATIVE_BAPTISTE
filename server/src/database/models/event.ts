@@ -1,16 +1,37 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database";
 import Choice from "./choice";
+import GameEvent from "./gameEvent";
+import Game from "./game";
 
 class Event extends Model {
     declare id: number;
     declare type: string;
-    declare title : string;
+    declare title: string;
     declare description: string;
     declare level: number;
     declare choices: Choice[];
     declare readonly createdAt: Date;
     declare readonly updateAt: Date;
+
+    public games = async (): Promise<Game[]> => {
+        const gameEvents: GameEvent[] = await GameEvent.findAll({
+            where: {
+                eventId: this.id
+            }
+        });
+        const games = await Promise.all(gameEvents.map(async (gameEvent) => {
+            const game = await gameEvent.game();
+            return game ?? null;
+        }));
+        const sortedGames: Game[] = [];
+        games.forEach((game) => {
+            if (game) {
+                sortedGames.push(game);
+            }
+        });
+        return sortedGames;
+    }
 }
 
 Event.init({

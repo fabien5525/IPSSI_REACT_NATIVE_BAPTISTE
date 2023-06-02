@@ -6,6 +6,7 @@ class Choice extends Model {
     declare title: string;
     declare effect: {
         title: string;
+        description: string;
         health: number;
         strength: number;
         speed: number;
@@ -33,10 +34,17 @@ Choice.init({
             if (!rawValue) {
                 return [];
             }
-            return JSON.parse(rawValue)
+            return JSON.parse(rawValue) as {
+                title: string;
+                description: string;
+                health: number;
+                strength: number;
+                speed: number;
+            }[];
         },
         set(value: {
             title: string;
+            description: string;
             health: number;
             strength: number;
             speed: number;
