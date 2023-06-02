@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width:"95%",
-    margin: 10,
-  },
+    borderRadius: 1000,
+    width:"90%",
+    height:"50%",  },
   text: {
     color: 'black',
     fontSize: 16,

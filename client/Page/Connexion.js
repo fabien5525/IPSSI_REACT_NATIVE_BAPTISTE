@@ -2,43 +2,46 @@ import { StyleSheet, Text, View, Image,Modal,Button,TextInput} from 'react-nativ
 
 import { useState } from 'react';
 
-export default function Connexion({navigation}) {
+export default function Connexion({navigation, setIsLoggedInCallback }) {
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const VerificationLogin = () => {
-        fetch('http://5525.fr:19001/login', {
+    const VerificationLogin = async() => {
+      const req = await fetch('http://5525.fr:19001/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: username, password: password }),
+          body: JSON.stringify({ email: email, password: password }),
         })
-        .then((response) => {
-          const json = response.json();
-          if(response.status == 200) {
-            console.log(json);
-          setShowModal(false);
-          } else {
-            alert('Identifiant ou mot de passe incorrect')
-          }
-        })
+        const status = await req.status;
+        const res = await req.json();
+    
+        if (status === 200) {
+          localStorage.setItem('encodedData', res.encoded);
+          
+          setIsLoggedInCallback(true);
+                } else {
+          alert(res.message);
+        }
       };
 
       const handleGoToInscription = () => {
         navigation.navigate('Inscription')
     }
 
-    
+    const Pass = () => {
+      setIsLoggedInCallback(true);
+    }
 
     return(
         <View style={styles.modalContainer}>
-        <Text style={styles.modalText}>Identifiant</Text>
+        <Text style={styles.modalText}>Email</Text>
         <TextInput 
-        placeholder="Username"
+        placeholder="Email"
         style={styles.modalInput} 
-        onChangeText={(text) => setUsername(text)}
+        onChangeText={(text) => setEmail(text)}
         />
 
         <Text style={styles.modalText}>Mot de passe</Text>
@@ -50,6 +53,9 @@ export default function Connexion({navigation}) {
         <View style={styles.LesBoutons}>
         <Button title="Se connecter" style={styles.modalButton} onPress={() => VerificationLogin()}/>
         <Button title="S'inscrire" style={styles.modalButton} onPress={() => handleGoToInscription()}/>
+
+        <Button title="Pass" style={styles.modalButton} onPress={() => Pass()}/>
+
         </View>
       </View>
     )

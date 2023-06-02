@@ -10,22 +10,31 @@ import HistoriquePartie from './Page/HistoriquePartie';
 import { useState } from 'react';
 import Connexion from './Page/Connexion';
 import Inscription from './Page/Inscription';
+import { useEffect } from 'react';
+import GestionEvent from './Page/GestionEvent';
+import Niveau from './Page/Niveau';
 
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const PageInscrisptionConnexion = () => {
+
+const PageInscrisptionConnexion = ({ setIsLoggedInCallback }) => {
   return(
   <Stack.Navigator
   
   >
-    <Stack.Screen name="Connexion" component={Connexion} initialParams={Connexion} 
-                options={{
-                  headerShown: false,
-                }}
-    />
+    <Stack.Screen
+      name="Connexion"
+    >
+      {(props) => (
+        <Connexion
+          {...props}
+          setIsLoggedInCallback={setIsLoggedInCallback}
+        />
+      )}
+    </Stack.Screen>
     <Stack.Screen name="Inscription" component={Inscription} 
                     options={{
                       headerShown: false,
@@ -38,9 +47,10 @@ const PagePrincipale = () => {
   return (
     <Tab.Navigator>
     <Tab.Screen 
-    name="Jeux" 
-    component={Jeux} 
+    name="NiveauJeu" 
+    component={NiveauJeu} 
     options={{
+      headerShown: false,
       tabBarIcon: ({ color, size }) => (
         <Image source={require("./assets/joystick.png")} style={{ width: size, height: size, tintColor: color }} />
       ),
@@ -68,32 +78,57 @@ const PagePrincipale = () => {
     </Tab.Navigator>
   )};
 
+  const NiveauJeu = () => {
+    return (
+      <Stack.Navigator
+      >
+        <Stack.Screen name="Jeux" component={Jeux} />
+        <Stack.Screen name="Niveau" component={Niveau} />
+      </Stack.Navigator>
+
+        )}
 
   const Option = () => {
     return (
       <Stack.Navigator
       >
         <Stack.Screen name="Option" component={OptionUtilisateur} />
+        <Stack.Screen name="GestionEvent" component={GestionEvent} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />
       </Stack.Navigator>
     );
   };
 export default function App() {
+
+  // useEffect(() => {
+
+  // }, []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const setIsLoggedInCallback = (value) => {
+    setIsLoggedIn(value);
+  };
+  
   return (
     <NavigationContainer>
       {isLoggedIn ? (
         <PagePrincipale />
       ) : (
         <Stack.Navigator >
-          <Stack.Screen
-            options={{
-              headerShown: false,
-            }}
-            name="InscriptionConnexion"
-            component={PageInscrisptionConnexion}
-          />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="InscriptionConnexion"
+    >
+      {(props) => (
+        <PageInscrisptionConnexion
+          {...props}
+          setIsLoggedInCallback={setIsLoggedInCallback}
+        />
+      )}
+    </Stack.Screen>
+
         </Stack.Navigator>
       )}
     </NavigationContainer>
