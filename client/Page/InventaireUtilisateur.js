@@ -4,7 +4,7 @@ import { StyleSheet, Text, View,Image } from 'react-native';
 export default function InventaireUtilisateur() {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require('../assets/ad.jpg')}resizeMode="contain" />
+      <Image style={styles.image} source={require('../assets/bag.png')}resizeMode="contain" />
       <StatusBar style="auto" />
       <View style={styles.container}>
         <View style={styles.row}>

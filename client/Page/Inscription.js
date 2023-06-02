@@ -10,42 +10,45 @@ export default function Inscription({ navigation }) {
 
   const [email, setEmail] = useState('');
   const [image, setImage] = useState('https://picsum.photos/200/300');
-  const [selectedImageId, setSelectedImageId] = useState(null);
 
   const avatarDispo = [
     'https://picsum.photos/200/300',
     'https://picsum.photos/200/400',
     'https://picsum.photos/200/500',
-    'https://picsum.photos/200/500',
-    'https://picsum.photos/200/500',
-    'https://picsum.photos/200/500',
-    'https://picsum.photos/200/500',
-    'https://picsum.photos/200/500'
+    'https://picsum.photos/200/600',
+    'https://picsum.photos/200/700',
+    'https://picsum.photos/200/800',
+    'https://picsum.photos/200/900',
   ];
 
   const GoToConnexion = () => {
     navigation.navigate('Connexion')
   }
 
-  const renderDisplayImage = ({ item, index }) => {
+  const renderDisplayImage = ({ item }) => {
     return (
-      <Pressable key={index} onPress={() => setImage(item)}>
+      <Pressable key={item} onPress={() => setImage(item)}>
         <Image source={{ uri: item }}
           style={[
             styles.thumbnailImage,
-            selectedImageId === item.id && styles.highlightedImage,
+            image === item && styles.highlightedImage,
           ]} />
       </Pressable>
     )
   }
 
   const VerificationInsciption = async () => {
+ 
+    if (password !== passwordConfirm) {
+      alert('Les mots de passe ne sont pas identique');
+    } else {
+
     const req = await fetch('http://5525.fr:19001/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username: username, password: password, email: email, image: image }),
+      body: JSON.stringify({ pseudo: username, password: password, email: email, avatar: image }),
     });
     const status = await req.status;
     const res = await req.json();
@@ -57,6 +60,7 @@ export default function Inscription({ navigation }) {
       alert(res.message);
     }
   }
+}
 
   return (
     <View style={styles.container}>
@@ -94,8 +98,9 @@ export default function Inscription({ navigation }) {
           horizontal={true}
           data={avatarDispo}
           renderItem={renderDisplayImage}
-          keyExtractor={(item) => item.id.toString()} />
-      </View>
+/>    
+
+</View>
 
       <View style={styles.LesBoutons}>
         <Button title="Se connecter" style={styles.modalButton} onPress={() => GoToConnexion()} />

@@ -10,22 +10,30 @@ import HistoriquePartie from './Page/HistoriquePartie';
 import { useState } from 'react';
 import Connexion from './Page/Connexion';
 import Inscription from './Page/Inscription';
+import { useEffect } from 'react';
+import GestionEvent from './Page/GestionEvent';
 
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const PageInscrisptionConnexion = () => {
+
+const PageInscrisptionConnexion = ({ setIsLoggedInCallback }) => {
   return(
   <Stack.Navigator
   
   >
-    <Stack.Screen name="Connexion" component={Connexion} initialParams={Connexion} 
-                options={{
-                  headerShown: false,
-                }}
-    />
+    <Stack.Screen
+      name="Connexion"
+    >
+      {(props) => (
+        <Connexion
+          {...props}
+          setIsLoggedInCallback={setIsLoggedInCallback}
+        />
+      )}
+    </Stack.Screen>
     <Stack.Screen name="Inscription" component={Inscription} 
                     options={{
                       headerShown: false,
@@ -74,26 +82,42 @@ const PagePrincipale = () => {
       <Stack.Navigator
       >
         <Stack.Screen name="Option" component={OptionUtilisateur} />
+        <Stack.Screen name="GestionEvent" component={GestionEvent} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />
       </Stack.Navigator>
     );
   };
 export default function App() {
+
+  // useEffect(() => {
+
+  // }, []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const setIsLoggedInCallback = (value) => {
+    setIsLoggedIn(value);
+  };
+  
   return (
     <NavigationContainer>
       {isLoggedIn ? (
         <PagePrincipale />
       ) : (
         <Stack.Navigator >
-          <Stack.Screen
-            options={{
-              headerShown: false,
-            }}
-            name="InscriptionConnexion"
-            component={PageInscrisptionConnexion}
-          />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="InscriptionConnexion"
+    >
+      {(props) => (
+        <PageInscrisptionConnexion
+          {...props}
+          setIsLoggedInCallback={setIsLoggedInCallback}
+        />
+      )}
+    </Stack.Screen>
+
         </Stack.Navigator>
       )}
     </NavigationContainer>
