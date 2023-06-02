@@ -3,19 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // create table following models
 
-    /*
-      User:
-      declare id: number;
-      declare email: string;
-      declare password: string;
-      declare role: string;
-      declare pseudo: string;
-      declare avatar: string;
-      declare readonly createdAt: Date;
-      declare readonly updateAt: Date;
-     */
     await queryInterface.createTable('user', {
       id: {
         type: Sequelize.INTEGER,
@@ -55,19 +43,6 @@ module.exports = {
       }
     });
 
-    /*
-      Choice:
-      declare id: number;
-      declare title: string;
-      declare effect: {
-          title: string;
-          health: number;
-          strength: number;
-          speed: number;
-      }[];
-      declare readonly createdAt: Date;
-      declare readonly updateAt: Date;
-      */
     await queryInterface.createTable('choice', {
       id: {
         type: Sequelize.INTEGER,
@@ -94,17 +69,6 @@ module.exports = {
       }
     });
 
-    /*
-      Event:
-      declare id: number;
-      declare type: string;
-      declare title : string;
-      declare description: string;
-      declare level: number;
-      declare choices: Choice[];
-      declare readonly createdAt: Date;
-      declare readonly updateAt: Date;
-      */
     await queryInterface.createTable('event', {
       id: {
         type: Sequelize.INTEGER,
@@ -143,21 +107,82 @@ module.exports = {
       }
     });
 
-    /*
-      Game:
-      declare id: number;
-      declare userId: number;
-      declare user: User;
-      
+    await queryInterface.createTable('game', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      status: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'user',
+          key: 'id'
+        }
+      },
+      stats: {
+        type: Sequelize.JSON,
+        allowNull: false
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
 
+    await queryInterface.createTable('gameEvent', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      gameId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'game',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      eventId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'event',
+          key: 'id'
+        }
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable('gameEvent');
+    await queryInterface.dropTable('game');
+    await queryInterface.dropTable('event');
+    await queryInterface.dropTable('choice');
+    await queryInterface.dropTable('user');
   }
 };
