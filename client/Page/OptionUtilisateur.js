@@ -10,7 +10,7 @@ export default function OptionUtilisateur() {
   };
 
   handleToGestionEvent = () => {
-    navigation.navigate('GestionEvent');
+    navigation.navigate('Gestion Event');
   }
 
 

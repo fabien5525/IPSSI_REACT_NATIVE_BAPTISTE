@@ -10,10 +10,12 @@ import HistoriquePartie from './Page/HistoriquePartie';
 import { useState } from 'react';
 import Connexion from './Page/Connexion';
 import Inscription from './Page/Inscription';
-import { useEffect } from 'react';
+import { useEffect,useLayoutEffect } from 'react';
 import GestionEvent from './Page/GestionEvent';
 import Niveau from './Page/Niveau';
-
+import DetailEvent from './Page/DetailEvent';
+import Editer from './Page/EditerEvent';
+import EditerEvent from './Page/EditerEvent';
 
 
 const Tab = createBottomTabNavigator();
@@ -93,11 +95,40 @@ const PagePrincipale = () => {
       <Stack.Navigator
       >
         <Stack.Screen name="Option" component={OptionUtilisateur} />
-        <Stack.Screen name="GestionEvent" component={GestionEvent} />
+        <Stack.Screen name="Gestion Event" component={CRUD} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />
       </Stack.Navigator>
     );
   };
+  const CRUD = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="GestionEvent"
+          component={GestionEvent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={DetailEvent}
+          options={{
+            headerTitle: "Détail de l'événement",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
+
+<Stack.Screen
+          name="Editer"
+          component={EditerEvent}
+          options={{
+            headerTitle: "Détail de l'événement",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+      
 export default function App() {
 
   // useEffect(() => {

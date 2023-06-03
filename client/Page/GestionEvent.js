@@ -5,30 +5,39 @@ import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export default function GestionEvent() {
+export default function GestionEvent({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [allEvent, setEvent] = useState(
         [
             {
                 id: 1,
                 type: 'determiner',
-                title: 'RencontreBaguette',
-                description: 'Rencontre avec un marchand de baguette',
+                title: 'la Baguette',
+                description: 'Rencontre avec un marchand qui vend des baguette de pain',
                 niveau: 1,
             },
             {
                 id: 2,
                 type: 'determiner',
-                title: 'TaperDieuEternelleAbysse',
-                description: 'Taper Dieu Eternelle des Abysse',
+                title: 'Combat contre le Dieu Eternelle des Abysse',
+                description: `Vous venez d'avoir votre baguette de pain, vous vous retrouvez face au Dieu Eternelle des Abysse, il vous attaque avec son attaque ultime, vous avez 2 choix, soit vous l'attaquez avec votre baguette de pain, soit vous vous enfuyez`,
                 niveau: 2,
             },
             
         ])
 
-const  modalDetail = () => {
-    setModalVisible(true);
+const  detail = (item) => {
+    navigation.navigate('Detail', item )
 }
+const  edit = (item) => {
+    navigation.navigate('Editer', item )
+}
+
+const  supprimer = (id) => {
+    console.log(id)
+}
+
+
     const renderEvent = ({ item }) => { 
         return (
             <View style={styles.itemList}>
@@ -37,14 +46,14 @@ const  modalDetail = () => {
                 </Text>
                 <IconButton
       icon={() => <Icon name="info-circle" size={20} color="blue" />}
-      onPress={() => modalDetail()}
+      onPress={() => detail(item)}
                 />
                 <IconButton
       icon={() => <Icon name="edit" size={20} color="green" />}
-                          onPress={() => edit()}/>
+                          onPress={() => edit(item)}/>
                 <IconButton
                     icon={() => <Icon name="trash" size={20} color="black" />}
-                    onPress={() => supprimer()}/>
+                    onPress={() => supprimer(item.id)}/>
             </View>
         )
     } 
@@ -63,7 +72,7 @@ const styles = StyleSheet.create({
     itemList: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#ccc',
@@ -77,8 +86,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         },
-        modalText: {
-        fontSize: 20,
-        marginBottom: 10,
-        },
+
     })
