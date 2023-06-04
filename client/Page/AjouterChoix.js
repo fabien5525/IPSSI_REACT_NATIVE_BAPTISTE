@@ -2,48 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const AjouterEvent = () => {
+const AjouterChoix = () => {
   const [events, setEvents] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [pv, setpv] = useState("1");
+
+    const [force, setforce] = useState("1");
+
+    const [vitesse, setvitesse] = useState("1");
+
+
 
   const [selectedValue, setSelectedValue] = useState(1);
-const  [NbNiveau, setNbNiveau] = useState([
-  
-  {
-    id: 1,
-    name: 'Niveau 1',
-    image: 'https://picsum.photos/200/300',
-    unlock: true,
-  },
-  {
-    id: 2,
-    name: 'Niveau 2',
-    image: 'https://picsum.photos/200/300',
-    unlock: false,
-  },
-]);
 
 
 const [ListeDeChoix, setListeDeChoix] = useState([
 
 ]);
-  // Chargement initial des événements depuis l'API
   useEffect(() => {
     fetchEvents();
   }, []);
 
   const fetchEvents = () => {
-    // Effectuer une requête à l'API pour récupérer les événements
-    // et mettre à jour la liste des événements (state events)
   };
 
-  const addEvent = () => {
+  const addchoice = () => {
     if (title.trim() !== '' && description.trim() !== '') {
-        const addEvent = async () => {
+        const addchoice = async () => {
             if (title.trim() !== '' && description.trim() !== '') {
               try {
-                // Effectuer la requête POST à l'API pour ajouter un nouvel événement
                 const response = await fetch('FerchAjouter/events', {
                   method: 'POST',
                   headers: {
@@ -57,12 +45,11 @@ const [ListeDeChoix, setListeDeChoix] = useState([
           
                 if (response.ok) {
                   const newEvent = await response.json();
-                  // Mettre à jour la liste des événements avec le nouvel événement
                   setEvents(prevEvents => [...prevEvents, newEvent]);
                   setTitle('');
                   setDescription('');
                 } else {
-                  console.log('Erreur lors de l\'ajout de l\'événement');
+                  console.log('Erreur lors de l\'ajout de choix');
                 }
               } catch (error) {
                 console.log('Erreur lors de la requête API :', error);
@@ -82,36 +69,43 @@ const [ListeDeChoix, setListeDeChoix] = useState([
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="titre de l'event"
+          placeholder="titre du choix"
           value={title}
           onChangeText={text => setTitle(text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="description de l'event"
+          placeholder="description du choix"
           value={description}
           onChangeText={text => setDescription(text)}
         />
-
-<Picker
-  style={styles.lvlpicker}
-  mode="dropdown"
-  selectedValue={selectedValue}
-  onValueChange={(itemValue) => setSelectedValue(itemValue)}
->
-  {NbNiveau.map((item, index) => {
-    return (
-      <Picker.Item
-        label={item.name}
-        value={item.id}
-        key={index}
+<View style={styles.NumContainer}>
+<TextInput
+        style={styles.NumericInput}
+        value={pv}
+        onChangeText={number => setpv(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="PV"
       />
-    );
-  })}
-</Picker>
 
+<TextInput
+        style={styles.NumericInput}
+        value={force}
+        onChangeText={number => setforce(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="Force"
+      />
 
-        <Button title="Ajouter un évenement" onPress={addEvent} />
+<TextInput
+        style={styles.NumericInput}
+        value={vitesse}
+        onChangeText={number => setvitesse(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="Vitesse"
+      />
+      </View>
+
+        <Button title="Ajouter un choix" onPress={addchoice} />
       </View>
 
     </View>
@@ -150,6 +144,23 @@ const styles = StyleSheet.create({
     borderRadius: 4,
 
   },
+  NumContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    
+  },
+  NumericInput: {
+    flex: 1,
+    marginLeft: 10,
+    padding: 10,
+    borderWidth: 3,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    fontSize: 16,
+  },
+
   eventContainer: {
     marginBottom: 10,
     borderWidth: 1,
@@ -183,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AjouterEvent;
+export default AjouterChoix;

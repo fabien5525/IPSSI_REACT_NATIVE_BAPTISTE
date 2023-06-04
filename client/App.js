@@ -16,6 +16,11 @@ import Niveau from './Page/Niveau';
 import DetailEvent from './Page/DetailEvent';
 import Editer from './Page/EditerEvent';
 import EditerEvent from './Page/EditerEvent';
+import AjouterEvent from './Page/AjoutEvent';
+import GestionChoix from './Page/GestionChoix';
+import DetailChoix from './Page/DetailChoix';
+import AjouterChoix from './Page/AjouterChoix';
+import EditerChoix from './Page/EditerChoix';
 
 
 const Tab = createBottomTabNavigator();
@@ -68,7 +73,7 @@ const PagePrincipale = () => {
         }}
       />
       <Tab.Screen
-        name="AllOption"
+        name="Options"
         component={Option}
         options={{
           headerShown: false,
@@ -99,7 +104,8 @@ const NiveauJeu = () => {
       <Stack.Navigator
       >
         <Stack.Screen name="Option" component={OptionUtilisateur} />
-        <Stack.Screen name="Gestion Event" component={CRUD} />
+        <Stack.Screen name="Gestion des events" component={CRUD} />
+        <Stack.Screen name="Gestion des choix" component={CRUDChoix} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />
       </Stack.Navigator>
     );
@@ -120,18 +126,64 @@ const NiveauJeu = () => {
             headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
           }}
         />
+<Stack.Screen
+          name="Ajouter"
+          component={AjouterEvent}
+          options={{
+            headerTitle: "Ajouter un événement",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
 
 <Stack.Screen
           name="Editer"
           component={EditerEvent}
           options={{
-            headerTitle: "Détail de l'événement",
+            headerTitle: "Editer un événement",
             headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
           }}
         />
       </Stack.Navigator>
     );
   };
+
+  const CRUDChoix = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="GestionChoix"
+          component={GestionChoix}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={DetailChoix}
+          options={{
+            headerTitle: "Détail du choix",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
+<Stack.Screen
+          name="Ajouter"
+          component={AjouterChoix}
+          options={{
+            headerTitle: "Ajouter un choix",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
+
+<Stack.Screen
+          name="Editer"
+          component={EditerChoix}
+          options={{
+            headerTitle: "Editer un choix",
+            headerBackTitleVisible: false, // Masquer le titre de la page parent dans le bouton de retour
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
       
 export default function App() {
 

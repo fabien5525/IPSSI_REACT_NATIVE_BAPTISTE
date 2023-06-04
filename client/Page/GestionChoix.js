@@ -5,23 +5,28 @@ import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export default function GestionEvent({navigation}) {
+
+ export default function GestionChoix({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
-    const [allEvent, setEvent] = useState(
+    const [allChoice, setChoice] = useState(
         [
             {
                 id: 1,
-                type: 'determiner',
-                title: 'la Baguette',
-                description: 'Rencontre avec un marchand qui vend des baguette de pain',
-                niveau: 1,
+                eventId: 1,
+                title: 'Brulure',
+                description: 'ça brule',
+                pv: "1",
+                force: "1",
+                vitesse: "1",
             },
             {
                 id: 2,
-                type: 'determiner',
-                title: 'Combat contre le Dieu Eternelle des Abysse',
-                description: `Vous venez d'avoir votre baguette de pain, vous vous retrouvez face au Dieu Eternelle des Abysse, il vous attaque avec son attaque ultime, vous avez 2 choix, soit vous l'attaquez avec votre baguette de pain, soit vous vous enfuyez`,
-                niveau: 2,
+                eventId: 1,
+                title: 'Foudre',
+                description: 'ça foudroie',
+                pv: "1",
+                force: "1",
+                vitesse: "1",
             },
             
         ])
@@ -65,7 +70,7 @@ const  supprimer = (id) => {
     return (
         <View style={styles.container}>
             <FlatList
-                data={allEvent}
+                data={allChoice}
                 renderItem={renderEvent}
 />                
 

@@ -10,9 +10,12 @@ export default function OptionUtilisateur() {
   };
 
   handleToGestionEvent = () => {
-    navigation.navigate('Gestion Event');
+    navigation.navigate('Gestion des events');
   }
 
+  handleToGestionChoix = () => {
+    navigation.navigate('Gestion des choix');
+  }
 
   return (
     <View style={styles.container}>
@@ -21,6 +24,11 @@ export default function OptionUtilisateur() {
       <View style={styles.button}>
         <Button title="Gestion des events" onPress={() => handleToGestionEvent()} />
       </View>
+
+      <View style={styles.button}>
+        <Button title="Gestion des choix" onPress={() => handleToGestionChoix()} />
+      </View>
+
       <View style={styles.button}>
         <Button style={styles.button} title="historique des parties" onPress={() => handleToHistorique()} />
       </View>

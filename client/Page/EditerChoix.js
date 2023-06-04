@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-export default function EditerEvent({ navigation, route }) {
+export default function EditerChoix({ navigation, route }) {
     const item = route.params;
 
 
     const [title, setTitle] = useState(item.title);
     const [description, setDescription] = useState(item.description);
-    const [selectedValue, setSelectedValue] = useState(item.niveau);
 
-    const NbNiveau = [1,2,3,4,5,6,7,8,9,10];
+    const [pv, setpv] = useState(item.pv);
+    const [force, setforce] = useState(item.force);
+    const [vitesse, setvitesse] = useState(item.vitesse);
+
     const editer = () => {
         console.log(item.id)
     }
@@ -20,36 +22,42 @@ export default function EditerEvent({ navigation, route }) {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="titre de l'event"
+              placeholder="titre du choix"
               value={title}
               onChangeText={text => setTitle(text)}
             />
             <TextInput
               style={styles.input}
-              placeholder="description de l'event"
+              placeholder="description du choix"
               value={description}
               onChangeText={text => setDescription(text)}
             />
-    
-    <Picker
-     style={styles.lvlpicker}
-      mode="dropdown"
-      selectedValue={selectedValue}
-      onValueChange={(itemValue) => setSelectedValue(itemValue)}
-    >
-      {NbNiveau.map((item, index) => {
-        return (
-          <Picker.Item
-            label={item.toString()}
-            value={item}
-            key={index}
-          />
-        );
-      })}
-    </Picker>
-    
-    
-            <Button title="Editer un évenement" onPress={editer} />
+    <View style={styles.NumContainer}>
+<TextInput
+        style={styles.NumericInput}
+        value={pv}
+        onChangeText={number => setpv(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="PV"
+      />
+
+<TextInput
+        style={styles.NumericInput}
+        value={force}
+        onChangeText={number => setforce(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="Force"
+      />
+
+<TextInput
+        style={styles.NumericInput}
+        value={vitesse}
+        onChangeText={number => setvitesse(number)}
+        keyboardType="numeric" // Utiliser le clavier numérique
+        placeholder="Vitesse"
+      />
+      </View>
+            <Button title="Editer un choix" onPress={editer} />
           </View>
     
         </View>
@@ -119,6 +127,22 @@ export default function EditerEvent({ navigation, route }) {
           color: 'white',
           fontWeight: 'bold',
         },
+        NumContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 10,
+            
+          },
+          NumericInput: {
+            flex: 1,
+            marginLeft: 10,
+            padding: 10,
+            borderWidth: 3,
+            borderColor: '#ccc',
+            borderRadius: 4,
+            fontSize: 16,
+          },
       });
       
       
