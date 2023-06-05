@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function OptionUtilisateur( { setIsLoggedInCallback}) {
+export default function OptionUtilisateur({ setIsLoggedInCallback}) {
   const navigation = useNavigation();
 
   const handleToHistorique = () => {
@@ -16,7 +17,10 @@ export default function OptionUtilisateur( { setIsLoggedInCallback}) {
   handleToGestionChoix = () => {
     navigation.navigate('Gestion des choix');
   }
-
+const deconnexion = async () => {
+  await AsyncStorage.removeItem('token');
+  setIsLoggedInCallback(false);  
+}
   return (
     <View style={styles.container}>
 
@@ -36,7 +40,7 @@ export default function OptionUtilisateur( { setIsLoggedInCallback}) {
         <Button style={styles.button} title="modifier mes informations" onPress={() => alert('Changer de mot de passe')} />
       </View>
       <View style={styles.button}>
-        <Button style={styles.button} title="Se déconnecter" onPress={() => setIsLoggedInCallback(false)} /></View>
+        <Button style={styles.button} title="Se déconnecter" onPress={() => deconnexion()} /></View>
       <StatusBar style="auto" />
     </View >
   );

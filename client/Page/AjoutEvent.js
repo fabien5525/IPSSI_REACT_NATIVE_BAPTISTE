@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useIsFocused } from '@react-navigation/native';
 
 const AjouterEvent = ({navigation}) => {
+  const isFocused = useIsFocused();
   const [events, setEvents] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  
   const [selectedValue, setSelectedValue] = useState(0);
 const  [NbNiveau, setNbNiveau] = useState([
   
@@ -60,15 +62,7 @@ const  [NbNiveau, setNbNiveau] = useState([
 const [ListeDeChoix, setListeDeChoix] = useState([
 
 ]);
-  // Chargement initial des événements depuis l'API
-  useEffect(() => {
-    fetchEvents();
-  }, []);
 
-  const fetchEvents = () => {
-    // Effectuer une requête à l'API pour récupérer les événements
-    // et mettre à jour la liste des événements (state events)
-  };
 
   const addEvent = async () => {
     if (title.trim() !== '' && description.trim() !== '') {
@@ -91,10 +85,6 @@ const [ListeDeChoix, setListeDeChoix] = useState([
           
                 if (response.ok) {
                   const newEvent = await response.json();
-                  // Mettre à jour la liste des événements avec le nouvel événement
-                  // setEvents(prevEvents => [...prevEvents, newEvent]);
-                  // setTitle('');
-                  // setDescription('');
                   navigation.goBack();
                 } else {
                   console.log('Erreur lors de l\'ajout de l\'événement' +  JSON.stringify(response));

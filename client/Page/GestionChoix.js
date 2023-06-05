@@ -3,49 +3,40 @@ import { useEffect, useState } from 'react';
 
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 
  export default function GestionChoix({ navigation }) {
+    const isFocused = useIsFocused();
     const [modalVisible, setModalVisible] = useState(false);
     const [allChoice, setChoice] = useState(
         [
-            {
-                id: 1,
-                eventId: 1,
-                title: 'Brulure',
-                description: 'ça brule',
-                effectTitle: `l'effet c'est de bruler`,
-                pv: "1",
-                force: "1",
-                vitesse: "1",
-            },
-            {
-                id: 2,
-                eventId: 1,
-                title: 'Foudre',
-                description: 'ça foudroie',
-                effectTitle: `l'effet c'est de glacer`,
-
-                pv: "1",
-                force: "1",
-                vitesse: "1",
-            },
-            
         ])
 
         useEffect(() => {
+            if (isFocused) {
             const getChoice = async () => {
                 try {
-                    const response = await fetch('http://5525.fr:19001/choice');
+                    const token = await AsyncStorage.getItem('token');
+
+                    const response = await fetch('http://5525.fr:19001/choice', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
                     const json = await response.json();
-                    setChoice(json);
+
+                    console.log(json)
+                    setChoice(json.choices);
                 } catch (error) {
                     console.log('Erreur lors de la requête API :', error);
                 }
             };
             getChoice();
-        }, []);
+        }
+        }, [isFocused]);
 
 const ajouter = () => {
     navigation.navigate('Ajouter')
@@ -62,8 +53,14 @@ const  supprimer = (id) => {
 
     const deleteEvent = async () => {
         try {
+            const token = await AsyncStorage.getItem('token');
+
             const response = await fetch('http://5525.fr:19001/event/' + id, {
-                method: 'DELETE',
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+                
             });
             if (response.ok) {
                 setEvent(allEvent.filter(item => item.id !== id));

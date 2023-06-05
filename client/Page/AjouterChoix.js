@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AjouterChoix = ({navigation}) => {
   const [events, setEvents] = useState([]);
@@ -14,69 +15,70 @@ const AjouterChoix = ({navigation}) => {
 
     const [vitesse, setvitesse] = useState("1");
 
-
-
-  const [selectedValue, setSelectedValue] = useState(1);
+ const [selectedValue, setSelectedValue] = useState(1);
 
 
 
-const [EventLier, setEventLier] = useState(0);
+const [EventLier, setEventLier] = useState(1);
 
-const [ListeDesEvent, setListeDesEvent] = useState([1,2,3,4,5]);
+const [ListeDesEvent, setListeDesEvent] = useState([]);
 
 
 useEffect(() => {
-    const getEvents = async () => {
+  const getEvent = async () => {
       try {
-        const response = await fetch('http://5525.fr:19001/event');
-        const json = await response.json();
-        setListeDesEvent(json);
+          const token = await AsyncStorage.getItem('token');
+          const response = await fetch('http://5525.fr:19001/event', {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+              },
+          });
+          const json = await response.json();
+          console.log(json.events)
+          setListeDesEvent(json.events);
       } catch (error) {
-        console.log('Erreur lors de la requête API :', error);
+          console.log('Erreur lors de la requête API :', error);
       }
-    };
+  };
+  getEvent();
+}, []);
 
-    getEvents();
-  }, []);
+  const addchoice = async () => {
+    const token = await AsyncStorage.getItem('token');
 
-  const addchoice = () => {
     if (title.trim() !== '' && description.trim() !== '') {
-        const addchoice = async () => {
-            if (title.trim() !== '' && description.trim() !== '') {
               try {
-                const response = await fetch('FerchAjouter/choice', {
+                const response = await fetch(`http://5525.fr:19001/event/${EventLier}/choice`, {
                   method: 'POST',
                   headers: {
+                    'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    EventLier: EventLier,
                     title: title,
-
-                    effectTitle: effectTitle,
-                    description: description,
-                    pv: pv,
-                    force: force,
-                    vitesse: vitesse,
+                    effect: [
+                      {
+                        title: effectTitle,
+                        description: description,
+                        health: parseInt(pv),
+                        strength: parseInt(force),
+                        speed: parseInt(vitesse)
+                      }
+                    ]
                   }),
                 });
           
                 if (response.ok) {
                   navigation.goBack();
                 } else {
-                  console.log('Erreur lors de l\'ajout de choix');
+                  console.log('Erreur lors de l\'ajout de choix', response.status);
                 }
               } catch (error) {
                 console.log('Erreur lors de la requête API :', error);
               }
-            }
-          };
-          
-      setTitle('');
-      setDescription(''); 
-    }
   };
-
+  };
 
   return (
     <View style={styles.container}>
@@ -98,7 +100,7 @@ useEffect(() => {
 <TextInput
           style={styles.input}
           placeholder="titre de l'effet du choix "
-          value={title}
+          value={effectTitle}
           onChangeText={text => setEffectTitle(text)}
         />
 <View style={styles.NumContainer}>
@@ -135,7 +137,7 @@ useEffect(() => {
   {ListeDesEvent.map((item, index) => {
     return (
       <Picker.Item
-        label={item.toString()}
+        label={item.title}
         value={item.id}
         key={index}
       />
