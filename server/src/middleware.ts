@@ -1,4 +1,4 @@
-import { Secret, verify, JwtPayload } from 'jsonwebtoken';
+import { verify, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { sign } from 'jsonwebtoken';
 import { secret } from '../config/config.json';
@@ -9,6 +9,7 @@ export interface CustomRequest extends Request {
 }
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('middleware isAdmin');
     try {
         const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -19,10 +20,19 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
         const decoded = verify(token, secret);
         (req as CustomRequest).token = decoded;
 
-        const rawRoles = (decoded as JwtPayload).roles ?? [];
-        const roles: string[] = (typeof rawRoles === 'string') ? JSON.parse(rawRoles) : rawRoles;
+        const userId: string = (decoded as JwtPayload).id ?? "";
 
-        if (!roles.includes('admin')) {
+        const user = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+
+        if (!user) {
+            return res.status(401).send('Vous n\'avez pas les droits pour effectuer cette action.');
+        }
+
+        if (user.role !== "admin") {
             return res.status(401).send('Vous n\'avez pas les droits pour effectuer cette action.');
         }
 

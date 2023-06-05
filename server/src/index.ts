@@ -18,35 +18,23 @@ const eventController = new EventController();
 const choiceController = new ChoiceController();
 
 app.post('/register', userController.register);
-
 app.post('/login', userController.login);
 
-app.get('/user', userController.getAll);
+app.get('/user', isAdmin, userController.getAll);
+app.get('/user/:id', isAdmin, userController.getOne);
+app.put('/user/:id', isAdmin, userController.update);
+app.delete('/user/:id', isAdmin, userController.delete);
 
-app.get('/user/:id', userController.getOne);
-
-app.put('/user/:id', userController.update);
-
-app.delete('/user/:id', userController.delete);
-
-app.get('/event', isAdmin, userController.getAll);
-
+app.get('/event', isAdmin, eventController.getAll);
 app.post('/event', isAdmin, eventController.create);
-
 app.get('/event/:id', isAdmin, eventController.getOne);
-
 app.put('/event/:id', isAdmin, eventController.update);
-
 app.delete('/event/:id', isAdmin, eventController.delete);
-
 app.get('/event/:id/choices', isAdmin, eventController.getChoices);
 
 app.get('/choice', isAdmin, choiceController.getAll);
-
 app.get('/choice/:id', isAdmin, choiceController.getOne);
-
 app.put('/choice/:id', isAdmin, choiceController.update);
-
 app.delete('/choice/:id', isAdmin, choiceController.delete);
 
 app.get('*', async (req, res) => {

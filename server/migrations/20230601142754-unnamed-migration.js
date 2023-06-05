@@ -65,10 +65,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      choices: {
-        type: Sequelize.JSON,
-        allowNull: false
-      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -184,6 +180,17 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
+
+    //create admin user
+    await queryInterface.bulkInsert('user', [{
+      email: 'p@free.fr',
+      password: '$2b$08$V2x0M5wYCW0QRuKzMCCgB.qq7zQoRyHhyvAow.ZSoSUt5/PJg/iEq',
+      role: 'admin',
+      pseudo: 'admin',
+      avatar: 'https://picsum.photos/200/300',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }], {});
   },
 
   async down(queryInterface, Sequelize) {

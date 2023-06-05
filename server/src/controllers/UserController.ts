@@ -34,6 +34,7 @@ class UserController {
             await user.save();
             res.status(200).send({ message: 'User created' });
         } catch (error: any) {
+            console.error(error);
             res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
             return
         }
@@ -71,7 +72,7 @@ class UserController {
     }
 
     public getAll = async (req: Request, res: Response) => {
-        console.log("GET /user");
+        console.log("GET /event");
 
         const users = await User.findAll();
 
@@ -79,7 +80,7 @@ class UserController {
     }
 
     public getOne = async (req: Request, res: Response) => {
-        console.log("GET /user/:id");
+        console.log("GET /event/:id");
 
         const { id } = req.params;
 
@@ -103,7 +104,7 @@ class UserController {
     }
 
     public update = async (req: Request, res: Response) => {
-        console.log("PUT /user/:id");
+        console.log("PUT /event/:id");
 
         const { id } = req.params;
 
@@ -147,7 +148,7 @@ class UserController {
     }
 
     public delete = async (req: Request, res: Response) => {
-        console.log("DELETE /user/:id");
+        console.log("DELETE /event/:id");
 
         const { id } = req.params;
 

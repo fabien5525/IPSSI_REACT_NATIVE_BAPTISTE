@@ -39,7 +39,8 @@ class EventController {
 
         const { title, type, description, level } = req.body;
 
-        if (!title || title === '' || !type || type === '' || !description || description === '' || !level || level === '') {
+        if (!title || title === '' || !type || type === '' || !description || description === '') {
+            console.error("Veuillez rentrer des informations valides", req.body, title, type, description, level)
             res.status(400).send({ message: 'Veuillez rentrer des informations valides' });
             return;
         }
@@ -53,6 +54,7 @@ class EventController {
         try {
             await event.save();
         } catch (error: any) {
+            console.error(error)
             res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
             return
         }
@@ -81,9 +83,9 @@ class EventController {
             return;
         }
 
-        const { title, type, description, level, choices } = req.body;
+        const { title, type, description, level } = req.body;
 
-        if (!title || title === '' || !type || type === '' || !description || description === '' || !level || level === '' || !choices || choices === '') {
+        if (!title || title === '' || !type || type === '' || !description || description === '' || !level || level === '') {
             res.status(400).send({ message: 'Veuillez rentrer des informations valides' });
             return;
         }

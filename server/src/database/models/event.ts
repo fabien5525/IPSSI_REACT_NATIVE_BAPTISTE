@@ -66,20 +66,6 @@ Event.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    choices: {
-        type: DataTypes.JSON,
-        allowNull: false,
-        get() {
-            const rawValue = this.getDataValue('choices');
-            if (!rawValue) {
-                return [];
-            }
-            return JSON.parse(rawValue)
-        },
-        set(value: Choice[]) {
-            this.setDataValue('choices', JSON.stringify(value));
-        }
-    }
 }, { sequelize, modelName: "event", tableName: "event" });
 
 export default Event;
