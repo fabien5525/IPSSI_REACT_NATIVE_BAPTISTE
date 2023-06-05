@@ -56,7 +56,7 @@ const  supprimer = (id) => {
             const token = await AsyncStorage.getItem('token');
 
             const response = await fetch('http://5525.fr:19001/event/' + id, {
-                method: 'GET',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

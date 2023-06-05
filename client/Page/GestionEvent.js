@@ -57,8 +57,13 @@ export default function GestionEvent({ navigation }) {
 
         const deleteEvent = async () => {
             try {
+                const token = await AsyncStorage.getItem('token');
                 const response = await fetch('http://5525.fr:19001/event/' + id, {
                     method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     setEvent(allEvent.filter(item => item.id !== id));
