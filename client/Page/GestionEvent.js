@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, Image,Modal,Button,TextInput,FlatList,TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function GestionEvent({navigation}) {
@@ -26,7 +27,40 @@ export default function GestionEvent({navigation}) {
             
         ])
 
+        useEffect(() => {
+            const getEvent = async () => {
+                try {
+                    //pass bearer token through the fetch
+                    const token = getEncodedData();
+                    const response = await fetch('http://5525.fr:19001/event', {
+                        method: 'GET',
+                        headers: {
+                          'Authorization': 'Bearer ' + token,
+                        },
+                    });
+                    const json = await response.json();
+                    setEvent(json);
+                } catch (error) {
+                    console.log('Erreur lors de la requête API :', error);
+                }
+            };
+            getEvent();
+        }, []);
 
+        const getEncodedData = async () => {
+            try {
+              const encodedData = await AsyncStorage.getItem('token');
+              if (encodedData !== null) {
+                // La valeur existe, vous pouvez la traiter
+                console.log(encodedData);
+              } else {
+                // La valeur n'existe pas
+                console.log('Aucune valeur stockée avec la clé "token"');
+              }
+            } catch (error) {
+              console.log('Erreur lors de la récupération des données :', error);
+            }
+          };
 const ajouter = () => {
     navigation.navigate('Ajouter')
           };
@@ -39,7 +73,22 @@ const  edit = (item) => {
 }
 
 const  supprimer = (id) => {
-    console.log(id)
+
+    const deleteEvent = async () => {
+        try {
+            const response = await fetch('http://5525.fr:19001/event/' + id, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                setEvent(allEvent.filter(item => item.id !== id));
+            } else {
+                console.log('Erreur lors de la suppression de l\'événement');
+            }
+        } catch (error) {
+            console.log('Erreur lors de la requête API :', error);
+        }
+    }
+    deleteEvent();
 }
 
 

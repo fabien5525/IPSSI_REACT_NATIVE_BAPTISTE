@@ -99,11 +99,20 @@ const NiveauJeu = () => {
   )
 }
 
-  const Option = () => {
+  const Option = ({setIsLoggedInCallback}) => {
     return (
       <Stack.Navigator
       >
-        <Stack.Screen name="Option" component={OptionUtilisateur} />
+        <Stack.Screen
+  name="Option"
+>
+  {(props) => (
+    <OptionUtilisateur
+      {...props}
+      setIsLoggedInCallback={setIsLoggedInCallback}
+    />
+  )}
+</Stack.Screen>
         <Stack.Screen name="Gestion des events" component={CRUD} />
         <Stack.Screen name="Gestion des choix" component={CRUDChoix} />
         <Stack.Screen name="Historique" component={HistoriquePartie} />

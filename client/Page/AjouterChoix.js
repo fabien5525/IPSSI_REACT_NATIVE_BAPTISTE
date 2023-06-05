@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const AjouterChoix = () => {
+const AjouterChoix = ({navigation}) => {
   const [events, setEvents] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [effectTitle, setEffectTitle] = useState('');
   const [pv, setpv] = useState("1");
+
 
     const [force, setforce] = useState("1");
 
@@ -17,37 +19,50 @@ const AjouterChoix = () => {
   const [selectedValue, setSelectedValue] = useState(1);
 
 
-const [ListeDeChoix, setListeDeChoix] = useState([
 
-]);
-  useEffect(() => {
-    fetchEvents();
+const [EventLier, setEventLier] = useState(0);
+
+const [ListeDesEvent, setListeDesEvent] = useState([1,2,3,4,5]);
+
+
+useEffect(() => {
+    const getEvents = async () => {
+      try {
+        const response = await fetch('http://5525.fr:19001/event');
+        const json = await response.json();
+        setListeDesEvent(json);
+      } catch (error) {
+        console.log('Erreur lors de la requête API :', error);
+      }
+    };
+
+    getEvents();
   }, []);
-
-  const fetchEvents = () => {
-  };
 
   const addchoice = () => {
     if (title.trim() !== '' && description.trim() !== '') {
         const addchoice = async () => {
             if (title.trim() !== '' && description.trim() !== '') {
               try {
-                const response = await fetch('FerchAjouter/events', {
+                const response = await fetch('FerchAjouter/choice', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
+                    EventLier: EventLier,
                     title: title,
+
+                    effectTitle: effectTitle,
                     description: description,
+                    pv: pv,
+                    force: force,
+                    vitesse: vitesse,
                   }),
                 });
           
                 if (response.ok) {
-                  const newEvent = await response.json();
-                  setEvents(prevEvents => [...prevEvents, newEvent]);
-                  setTitle('');
-                  setDescription('');
+                  navigation.goBack();
                 } else {
                   console.log('Erreur lors de l\'ajout de choix');
                 }
@@ -75,9 +90,16 @@ const [ListeDeChoix, setListeDeChoix] = useState([
         />
         <TextInput
           style={styles.input}
-          placeholder="description du choix"
+          placeholder="description de l'effet du choix"
           value={description}
           onChangeText={text => setDescription(text)}
+        />
+
+<TextInput
+          style={styles.input}
+          placeholder="titre de l'effet du choix "
+          value={title}
+          onChangeText={text => setEffectTitle(text)}
         />
 <View style={styles.NumContainer}>
 <TextInput
@@ -104,6 +126,22 @@ const [ListeDeChoix, setListeDeChoix] = useState([
         placeholder="Vitesse"
       />
       </View>
+      <Picker
+  style={styles.lvlpicker}
+  mode="dropdown"
+  selectedValue={selectedValue}
+  onValueChange={(itemValue) => setEventLier(itemValue)}
+>
+  {ListeDesEvent.map((item, index) => {
+    return (
+      <Picker.Item
+        label={item.toString()}
+        value={item.id}
+        key={index}
+      />
+    );
+  })}
+</Picker>
 
         <Button title="Ajouter un choix" onPress={addchoice} />
       </View>

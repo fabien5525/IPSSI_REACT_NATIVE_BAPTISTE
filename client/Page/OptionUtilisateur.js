@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function OptionUtilisateur() {
+export default function OptionUtilisateur( { setIsLoggedInCallback}) {
   const navigation = useNavigation();
 
   const handleToHistorique = () => {
@@ -36,7 +36,7 @@ export default function OptionUtilisateur() {
         <Button style={styles.button} title="modifier mes informations" onPress={() => alert('Changer de mot de passe')} />
       </View>
       <View style={styles.button}>
-        <Button style={styles.button} title="Se déconnecter" onPress={() => alert('Se déconnecter')} /></View>
+        <Button style={styles.button} title="Se déconnecter" onPress={() => setIsLoggedInCallback(false)} /></View>
       <StatusBar style="auto" />
     </View >
   );

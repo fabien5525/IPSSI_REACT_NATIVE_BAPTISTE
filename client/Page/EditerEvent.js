@@ -11,9 +11,37 @@ export default function EditerEvent({ navigation, route }) {
     const [selectedValue, setSelectedValue] = useState(item.niveau);
 
     const NbNiveau = [1,2,3,4,5,6,7,8,9,10];
+
     const editer = () => {
-        console.log(item.id)
-    }
+      if (title.trim() !== '' && description.trim() !== '') {
+          const addEvent = async () => {
+              if (title.trim() !== '' && description.trim() !== '') {
+                try {
+                  const response = await fetch(`http://5525.fr:19001/event/${item.id}`, {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      title: title,
+                      type: "determiner",
+                      description: description,
+                      level: selectedValue,
+                    }),
+                  });
+            
+                  if (response.ok) {
+                    navigation.goBack();
+                  } else {
+                    console.log('Erreur lors de l\'ajout de l\'événement');
+                  }
+                } catch (error) {
+                  console.log('Erreur lors de la requête API :', error);
+                }
+              }
+            }
+          }
+        };
 
     return (
         <View style={styles.container}>

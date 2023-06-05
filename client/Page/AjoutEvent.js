@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const AjouterEvent = () => {
+const AjouterEvent = ({navigation}) => {
   const [events, setEvents] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [selectedValue, setSelectedValue] = useState(0);
 const  [NbNiveau, setNbNiveau] = useState([
   
+  {
+    id: 0,
+    name: 'Intro',
+    image: 'https://picsum.photos/200/300',
+    unlock: true,
+  },
   {
     id: 1,
     name: 'Niveau 1',
@@ -19,6 +25,30 @@ const  [NbNiveau, setNbNiveau] = useState([
   {
     id: 2,
     name: 'Niveau 2',
+    image: 'https://picsum.photos/200/300',
+    unlock: false,
+  },
+  {
+    id: 3,
+    name: 'Niveau 3',
+    image: 'https://picsum.photos/200/300',
+    unlock: false,
+  },
+  {
+    id: 4,
+    name: 'Niveau 4',
+    image: 'https://picsum.photos/200/300',
+    unlock: false,
+  },
+  {
+    id: 5,
+    name: 'Niveau 5',
+    image: 'https://picsum.photos/200/300',
+    unlock: false,
+  },
+  {
+    id: 6,
+    name: 'Niveau Final',
     image: 'https://picsum.photos/200/300',
     unlock: false,
   },
@@ -43,24 +73,27 @@ const [ListeDeChoix, setListeDeChoix] = useState([
         const addEvent = async () => {
             if (title.trim() !== '' && description.trim() !== '') {
               try {
-                // Effectuer la requête POST à l'API pour ajouter un nouvel événement
-                const response = await fetch('FerchAjouter/events', {
+                console.log("azd")
+                const response = await fetch('http://5525.fr:19001/event', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
                     title: title,
+                    type: "determiner",
                     description: description,
+                    level: selectedValue,
                   }),
                 });
           
                 if (response.ok) {
                   const newEvent = await response.json();
                   // Mettre à jour la liste des événements avec le nouvel événement
-                  setEvents(prevEvents => [...prevEvents, newEvent]);
-                  setTitle('');
-                  setDescription('');
+                  // setEvents(prevEvents => [...prevEvents, newEvent]);
+                  // setTitle('');
+                  // setDescription('');
+                  navigation.goBack();
                 } else {
                   console.log('Erreur lors de l\'ajout de l\'événement');
                 }

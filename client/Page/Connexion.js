@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Image,Modal,Button,TextInput} from 'react-native';
 
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion({navigation, setIsLoggedInCallback }) {
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
     const VerificationLogin = async() => {
       const req = await fetch('http://5525.fr:19001/login', {
@@ -19,13 +19,28 @@ export default function Connexion({navigation, setIsLoggedInCallback }) {
         const res = await req.json();
     
         if (status === 200) {
-          localStorage.setItem('encodedData', res.encoded);
-          
+          await AsyncStorage.setItem('token', res.token);
           setIsLoggedInCallback(true);
                 } else {
           alert(res.message);
         }
       };
+      const getEncodedData = async () => {
+        try {
+          const encodedData = await AsyncStorage.getItem('token');
+          if (encodedData !== null) {
+            // La valeur existe, vous pouvez la traiter
+            console.log(encodedData);
+          } else {
+            // La valeur n'existe pas
+            console.log('Aucune valeur stockée avec la clé "token"');
+          }
+        } catch (error) {
+          console.log('Erreur lors de la récupération des données :', error);
+        }
+      };
+
+      console.log(getEncodedData())    
 
       const handleGoToInscription = () => {
         navigation.navigate('Inscription')

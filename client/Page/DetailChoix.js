@@ -16,6 +16,10 @@ export default function DetailChoix({navigation, route }) {
             <Text>
                 {event.title}
             </Text>
+            
+            <Text>
+                {event.effectTitle}
+            </Text>
             <Text>
                 {event.description}
             </Text>

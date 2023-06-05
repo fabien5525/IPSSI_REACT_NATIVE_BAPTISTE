@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image,Modal,Button,TextInput,FlatList,TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
                 eventId: 1,
                 title: 'Brulure',
                 description: 'ça brule',
+                effectTitle: `l'effet c'est de bruler`,
                 pv: "1",
                 force: "1",
                 vitesse: "1",
@@ -24,6 +25,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
                 eventId: 1,
                 title: 'Foudre',
                 description: 'ça foudroie',
+                effectTitle: `l'effet c'est de glacer`,
+
                 pv: "1",
                 force: "1",
                 vitesse: "1",
@@ -31,6 +34,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
             
         ])
 
+        useEffect(() => {
+            const getChoice = async () => {
+                try {
+                    const response = await fetch('http://5525.fr:19001/choice');
+                    const json = await response.json();
+                    setChoice(json);
+                } catch (error) {
+                    console.log('Erreur lors de la requête API :', error);
+                }
+            };
+            getChoice();
+        }, []);
 
 const ajouter = () => {
     navigation.navigate('Ajouter')
@@ -44,9 +59,23 @@ const  edit = (item) => {
 }
 
 const  supprimer = (id) => {
-    console.log(id)
-}
 
+    const deleteEvent = async () => {
+        try {
+            const response = await fetch('http://5525.fr:19001/event/' + id, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                setEvent(allEvent.filter(item => item.id !== id));
+            } else {
+                console.log('Erreur lors de la suppression de l\'événement');
+            }
+        } catch (error) {
+            console.log('Erreur lors de la requête API :', error);
+        }
+    }
+    deleteEvent();
+}
 
     const renderEvent = ({ item }) => { 
         return (
