@@ -24,7 +24,7 @@ class Game extends Model {
         }) : null;
     }
 
-    private events = async (): Promise<Event[]> => {
+    public events = async (): Promise<Event[]> => {
         const gameEvents: GameEvent[] = await GameEvent.findAll({
             where: {
                 gameId: this.id

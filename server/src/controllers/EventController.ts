@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Event from "../database/models/Event";
+import Choice from "../database/models/Choice";
 
 class EventController {
     public getAll = async (req: Request, res: Response) => {
@@ -137,7 +138,7 @@ class EventController {
     }
 
     public getChoices = async (req: Request, res: Response) => {
-        console.log("GET /event/:id/choices");
+        console.log("GET /event/:id/choice");
 
         const { id } = req.params;
 
@@ -158,6 +159,146 @@ class EventController {
         }
 
         res.status(200).send({ choices: await event.choices() });
+    }
+
+    public addChoice = async (req: Request, res: Response) => {
+        console.log("POST /event/:id/choice");
+
+        const { id } = req.params;
+
+        if (!id || id === '') {
+            res.status(400).send({ message: 'Veuillez rentrer des informations valides' });
+            return;
+        }
+
+        const event = await Event.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!event) {
+            console.error("Event not found", id)
+            res.status(404).send({ message: 'Event not found' });
+            return;
+        }
+
+        const { title, effect } = req.body;
+
+        if (!title || title === '' || !effect || effect === '') {
+            res.status(400).send({ message: 'Veuillez rentrer des informations valides' });
+            return;
+        }
+
+        const choice = new Choice();
+        choice.eventId = event.id;
+        choice.title = title;
+        choice.effect = effect;
+
+        try {
+            await choice.save();
+        } catch (error: any) {
+            console.error(error)
+            res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
+            return
+        }
+
+        res.status(200).send({ choice });
+    }
+
+    public updateChoice = async (req: Request, res: Response) => {
+        console.log("PUT /event/:id/choice/:id");
+
+        const { id, choiceId } = req.params;
+
+        if (!id || id === '' || !choiceId || choiceId === '') {
+            res.status(400).send({ message: 'id not found' });
+            return;
+        }
+
+        const event = await Event.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!event) {
+            res.status(404).send({ message: 'Event not found' });
+            return;
+        }
+
+        const choice = await Choice.findOne({
+            where: {
+                id: choiceId
+            }
+        });
+
+        if (!choice) {
+            res.status(404).send({ message: 'Choice not found' });
+            return;
+        }
+
+        const { title, effect } = req.body;
+
+        if (!title || title === '' || !effect || effect === '') {
+            console.error('Veuillez rentrer des informations valides', req.body)
+            res.status(400).send({ message: 'Veuillez rentrer des informations valides' });
+            return;
+        }
+
+        choice.title = title;
+        choice.effect = effect;
+
+        try {
+            await choice.save();
+        } catch (error: any) {
+            res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
+            return
+        }
+
+        res.status(200).send({ choice });
+    }
+
+    public deleteChoice = async (req: Request, res: Response) => {
+        console.log("DELETE /event/:id/choice/:id");
+
+        const { id, choiceId } = req.params;
+
+        if (!id || id === '' || !choiceId || choiceId === '') {
+            res.status(400).send({ message: 'id not found' });
+            return;
+        }
+
+        const event = await Event.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!event) {
+            res.status(404).send({ message: 'Event not found' });
+            return;
+        }
+
+        const choice = await Choice.findOne({
+            where: {
+                id: choiceId
+            }
+        });
+
+        if (!choice) {
+            res.status(404).send({ message: 'Choice not found' });
+            return;
+        }
+
+        try {
+            await choice.destroy();
+        } catch (error: any) {
+            res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
+            return
+        }
+
+        res.status(200).send({ choice });
     }
 }
 

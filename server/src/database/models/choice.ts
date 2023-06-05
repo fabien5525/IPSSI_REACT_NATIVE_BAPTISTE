@@ -54,7 +54,7 @@ Choice.init({
             strength: number;
             speed: number;
         }[]) {
-            this.setDataValue('images', JSON.stringify(value));
+            this.setDataValue('effect', JSON.stringify(value));
         }
     }
 }, { sequelize, modelName: "choice", tableName: "choice" });
