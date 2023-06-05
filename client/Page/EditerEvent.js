@@ -10,12 +10,54 @@ export default function EditerEvent({ navigation, route }) {
     const [description, setDescription] = useState(item.description);
     const [selectedValue, setSelectedValue] = useState(item.niveau);
 
-    const NbNiveau = [1,2,3,4,5,6,7,8,9,10];
+    const  [NbNiveau, setNbNiveau] = useState([
+  
+      {
+        id: 0,
+        name: 'Intro',
+        image: 'https://picsum.photos/200/300',
+        unlock: true,
+      },
+      {
+        id: 1,
+        name: 'Niveau 1',
+        image: 'https://picsum.photos/200/300',
+        unlock: true,
+      },
+      {
+        id: 2,
+        name: 'Niveau 2',
+        image: 'https://picsum.photos/200/300',
+        unlock: false,
+      },
+      {
+        id: 3,
+        name: 'Niveau 3',
+        image: 'https://picsum.photos/200/300',
+        unlock: false,
+      },
+      {
+        id: 4,
+        name: 'Niveau 4',
+        image: 'https://picsum.photos/200/300',
+        unlock: false,
+      },
+      {
+        id: 5,
+        name: 'Niveau 5',
+        image: 'https://picsum.photos/200/300',
+        unlock: false,
+      },
+      {
+        id: 6,
+        name: 'Niveau Final',
+        image: 'https://picsum.photos/200/300',
+        unlock: false,
+      },
+    ]);
 
-    const editer = () => {
+    const editer = async() => {
       if (title.trim() !== '' && description.trim() !== '') {
-          const addEvent = async () => {
-              if (title.trim() !== '' && description.trim() !== '') {
                 try {
                   const response = await fetch(`http://5525.fr:19001/event/${item.id}`, {
                     method: 'PUT',
@@ -38,8 +80,6 @@ export default function EditerEvent({ navigation, route }) {
                 } catch (error) {
                   console.log('Erreur lors de la requête API :', error);
                 }
-              }
-            }
           }
         };
 
@@ -68,8 +108,8 @@ export default function EditerEvent({ navigation, route }) {
       {NbNiveau.map((item, index) => {
         return (
           <Picker.Item
-            label={item.toString()}
-            value={item}
+            label={item.name}
+            value={item.id}
             key={index}
           />
         );

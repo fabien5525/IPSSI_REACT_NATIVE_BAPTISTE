@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function GestionEvent({ navigation }) {
+    const isFocused = useIsFocused();
+
     const [modalVisible, setModalVisible] = useState(false);
     const [allEvent, setAllEvent] = useState([])
 
     useEffect(() => {
+        if (isFocused) {
         const getEvent = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
@@ -21,14 +25,15 @@ export default function GestionEvent({ navigation }) {
                     },
                 });
                 const json = await response.json();
-                console.log(json)
-                setAllEvent(json);
+                console.log(json.events)
+                setAllEvent(json.events);
             } catch (error) {
                 console.log('Erreur lors de la requête API :', error);
             }
         };
         getEvent();
-    }, []);
+    }
+    }, [isFocused]);
 
 
 

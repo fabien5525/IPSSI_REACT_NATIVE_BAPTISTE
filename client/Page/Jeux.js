@@ -9,15 +9,45 @@ export default function Jeux({ navigation }) {
 
   const [allevel, setAllevel] = useState([
     {
+      id: 0,
+      name: 'Intro',
+      image: 'https://picsum.photos/200/300',
+      unlock: true,
+    },
+    {
       id: 1,
       name: 'Niveau 1',
-      image: 'https://picsum.photos/200/300',
+      image: 'https://picsum.photos/200/400',
       unlock: true,
     },
     {
       id: 2,
       name: 'Niveau 2',
-      image: 'https://picsum.photos/200/300',
+      image: 'https://picsum.photos/200/500',
+      unlock: false,
+    },
+    {
+      id: 3,
+      name: 'Niveau 3',
+      image: 'https://picsum.photos/200/600',
+      unlock: false,
+    },
+    {
+      id: 4,
+      name: 'Niveau 4',
+      image: 'https://picsum.photos/200/700',
+      unlock: false,
+    },
+    {
+      id: 5,
+      name: 'Niveau 5',
+      image: 'https://picsum.photos/200/800',
+      unlock: false,
+    },
+    {
+      id: 6,
+      name: 'Niveau Final',
+      image: 'https://picsum.photos/200/900',
       unlock: false,
     },
   ])
@@ -30,7 +60,6 @@ export default function Jeux({ navigation }) {
     return (
       <Pressable onPress={() => item.unlock && handleGoToLevel(item)}>
         <View style={{
-          //vue for a card
           flex: 1,
           width: 300,
           height: 100,
@@ -38,7 +67,6 @@ export default function Jeux({ navigation }) {
           padding: 10,
           backgroundColor: item.unlock ? '#ccc' : '#aaa',
           borderRadius: 25,
-          //flex directtion row
           flexDirection: 'row',
         }}>
           <Image

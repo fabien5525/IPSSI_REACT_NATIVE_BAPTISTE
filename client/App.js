@@ -21,6 +21,7 @@ import GestionChoix from './Page/GestionChoix';
 import DetailChoix from './Page/DetailChoix';
 import AjouterChoix from './Page/AjouterChoix';
 import EditerChoix from './Page/EditerChoix';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Tab = createBottomTabNavigator();
@@ -30,7 +31,6 @@ const Stack = createStackNavigator();
 const PageInscrisptionConnexion = ({ setIsLoggedInCallback }) => {
   return (
     <Stack.Navigator
-
     >
       <Stack.Screen
         name="Connexion"
@@ -199,6 +199,14 @@ export default function App() {
   // useEffect(() => {
 
   // }, []);
+  const checkToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      return true
+    } else {
+      return false
+    }
+  };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const setIsLoggedInCallback = (value) => {
