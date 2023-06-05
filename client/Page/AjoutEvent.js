@@ -85,10 +85,6 @@ const [ListeDeChoix, setListeDeChoix] = useState([
           
                 if (response.ok) {
                   const newEvent = await response.json();
-                  // Mettre à jour la liste des événements avec le nouvel événement
-                  // setEvents(prevEvents => [...prevEvents, newEvent]);
-                  // setTitle('');
-                  // setDescription('');
                   navigation.goBack();
                 } else {
                   console.log('Erreur lors de l\'ajout de l\'événement' +  JSON.stringify(response));

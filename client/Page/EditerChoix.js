@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function EditerChoix({ navigation, route }) {
     const item = route.params;
@@ -49,20 +51,24 @@ export default function EditerChoix({ navigation, route }) {
             const editer = async () => {
                 if (title.trim() !== '' && description.trim() !== '') {
                     try {
+                      const token = await AsyncStorage.getItem('token');
                         const response = await fetch('http://5525.fr:19001/choice/' + item.id, {
                             method: 'PUT',
                             headers: {
+                                'Authorization': `Bearer ${token}`,
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                title: title,
-
-                                effectTitle : effectTitle,
-                                description: description,
-                                pv: pv,
-                                force: force,
-                                vitesse: vitesse,
-                                EffectTitle: effectTitle,
+                              title: title,
+                              effect: [
+                                {
+                                  title: effectTitle,
+                                  description: description,
+                                  health: parseInt(pv),
+                                  strength: parseInt(force),
+                                  speed: parseInt(vitesse)
+                                }
+                              ]
                             }),
                         });
                         const json = await response.json();
