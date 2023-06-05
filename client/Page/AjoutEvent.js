@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const AjouterEvent = ({navigation}) => {
   const [events, setEvents] = useState([]);
@@ -68,15 +70,15 @@ const [ListeDeChoix, setListeDeChoix] = useState([
     // et mettre à jour la liste des événements (state events)
   };
 
-  const addEvent = () => {
+  const addEvent = async () => {
     if (title.trim() !== '' && description.trim() !== '') {
-        const addEvent = async () => {
-            if (title.trim() !== '' && description.trim() !== '') {
+
               try {
-                console.log("azd")
+                const token = await AsyncStorage.getItem('token');
                 const response = await fetch('http://5525.fr:19001/event', {
                   method: 'POST',
                   headers: {
+                    'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
@@ -95,16 +97,11 @@ const [ListeDeChoix, setListeDeChoix] = useState([
                   // setDescription('');
                   navigation.goBack();
                 } else {
-                  console.log('Erreur lors de l\'ajout de l\'événement');
+                  console.log('Erreur lors de l\'ajout de l\'événement' +  JSON.stringify(response));
                 }
               } catch (error) {
                 console.log('Erreur lors de la requête API :', error);
               }
-            }
-          };
-          
-      setTitle('');
-      setDescription(''); 
     }
   };
 
