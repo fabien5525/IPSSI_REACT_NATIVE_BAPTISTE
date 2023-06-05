@@ -9,21 +9,7 @@
         "resolveJsonModule": true,
         "noImplicitAny": true,
         "moduleResolution": "node",
-        "baseUrl": "./",
-        "paths": {
-            "@controllers/*": [
-                "src/controllers/*"
-            ],
-            "@database/*": [
-                "src/database/*"
-            ],
-            "@models/*": [
-                "src/database/models/*"
-            ],
-            "@config/*": [
-                "config/*"
-            ],
-        }
+        "baseUrl": "./src"
     },
     "include": [
         "src/**/*.ts"

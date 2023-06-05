@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "@database/database";
+import sequelize from "../database";
 
 class Choice extends Model {
     declare id: number;

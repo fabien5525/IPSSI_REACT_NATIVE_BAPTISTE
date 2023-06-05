@@ -1,7 +1,8 @@
 import { Secret, verify, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { secret } from '@config/config.json';
-import User from '@models/User';
+import { sign } from 'jsonwebtoken';
+import { secret } from '../config/config.json';
+import User from './database/models/User';
 
 export interface CustomRequest extends Request {
     token: string | JwtPayload;
@@ -21,7 +22,7 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
         const rawRoles = (decoded as JwtPayload).roles ?? [];
         const roles: string[] = (typeof rawRoles === 'string') ? JSON.parse(rawRoles) : rawRoles;
 
-        if (!roles.includes('ROLE_ADMIN')) {
+        if (!roles.includes('admin')) {
             return res.status(401).send('Vous n\'avez pas les droits pour effectuer cette action.');
         }
 
@@ -32,19 +33,17 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const createToken = (user: User): string => {
-    const SECRET: Secret = process.env.SECRET as Secret;
-
-    if (!user._id) {
-        throw new Error('User _id is undefined');
+    if (!user.id) {
+        throw new Error('User id is undefined');
     }
 
     const payload = {
-        _id: user._id ? user._id.toString() : '',
+        id: user.id,
         email: user.email,
-        roles: user.roles
+        role: user.role
     }
 
-    const token = jwt.sign(payload, SECRET, {
+    const token = sign(payload, secret, {
         expiresIn: '2 days',
     });
 

@@ -1,8 +1,8 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "@database/database";
-import Choice from "@models/Choice";
-import Game from "@models/Game";
-import GameEvent from "@models/GameEvent";
+import sequelize from "../database";
+import Choice from "../models/Choice";
+import Game from "../models/Game";
+import GameEvent from "../models/GameEvent";
 
 
 class Event extends Model {

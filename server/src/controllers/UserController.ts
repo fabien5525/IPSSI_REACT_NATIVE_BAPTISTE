@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { SignCallback, sign } from 'jsonwebtoken';
-import { secret } from '@config/config.json';
 import { hash, compare } from 'bcrypt';
-import User from '@models/User';
+import User from '../database/models/User';
+import { createToken } from "../middleware";
 
 const SALT_ROUNDS = 8;
 
@@ -33,6 +32,7 @@ class UserController {
 
         try {
             await user.save();
+            res.status(200).send({ message: 'User created' });
         } catch (error: any) {
             res.status(500).send({ message: error?.errors?.map((err: any) => err.message + " ") });
             return
@@ -63,13 +63,8 @@ class UserController {
         const allowed = await compare(password, user.password);
 
         if (allowed) {
-            sign({ id: user.id }, secret, { expiresIn: '72h' }, (error: Error | null, encoded: string | undefined): void => {
-                if (error) {
-                    res.status(500).send({ message: 'Internal server error' });
-                } else {
-                    res.status(200).send({ encoded });
-                }
-            });
+            const token = createToken(user);
+            res.status(200).send({ token });
         } else {
             res.status(401).send({ message: 'Password not matching' });
         }
