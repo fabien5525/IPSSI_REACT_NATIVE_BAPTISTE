@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image,Modal,Button,TextInput,FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Modal, Button, TextInput, FlatList, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { IconButton } from 'react-native-paper';
@@ -6,97 +6,96 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function GestionEvent({navigation}) {
+export default function GestionEvent({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
-    const [allEvent, setEvent] = useState([])
+    const [allEvent, setAllEvent] = useState([])
 
-        useEffect(() => {
-            const getEvent = async () => {
-                try {
-                    const token = await AsyncStorage.getItem('token');
-                    const response = await fetch('http://5525.fr:19001/event', {
-                        method: 'GET',
-                        headers: {
-                          'Authorization': `Bearer ${token}`,
-                        },
-                    });
-                    const json = await response.json();
-                    setEvent(json);
-                } catch (error) {
-                    console.log('Erreur lors de la requête API :', error);
-                }
-            };
-            getEvent();
-        }, []);
-
-       
-
-        useEffect(() => {
-            console.log(allEvent); // Vérifier la valeur initiale de allEvent
-          }, [allEvent]); 
-
-          
-const ajouter = () => {
-    navigation.navigate('Ajouter')
-          };
-
-const  detail = (item) => {
-    navigation.navigate('Detail', item )
-}
-const  edit = (item) => {
-    navigation.navigate('Editer', item )
-}
-
-const  supprimer = (id) => {
-
-    const deleteEvent = async () => {
-        try {
-            const response = await fetch('http://5525.fr:19001/event/' + id, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                setEvent(allEvent.filter(item => item.id !== id));
-            } else {
-                console.log('Erreur lors de la suppression de l\'événement');
+    useEffect(() => {
+        const getEvent = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                const response = await fetch('http://5525.fr:19001/event', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                const json = await response.json();
+                console.log(json)
+                setAllEvent(json);
+            } catch (error) {
+                console.log('Erreur lors de la requête API :', error);
             }
-        } catch (error) {
-            console.log('Erreur lors de la requête API :', error);
-        }
+        };
+        getEvent();
+    }, []);
+
+
+
+    useEffect(() => {
+        console.log(allEvent); // Vérifier la valeur initiale de allEvent
+    }, [allEvent]);
+
+
+    const ajouter = () => {
+        navigation.navigate('Ajouter')
+    };
+
+    const detail = (item) => {
+        navigation.navigate('Detail', item)
     }
-    deleteEvent();
-}
+    const edit = (item) => {
+        navigation.navigate('Editer', item)
+    }
+
+    const supprimer = (id) => {
+
+        const deleteEvent = async () => {
+            try {
+                const response = await fetch('http://5525.fr:19001/event/' + id, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    setEvent(allEvent.filter(item => item.id !== id));
+                } else {
+                    console.log('Erreur lors de la suppression de l\'événement');
+                }
+            } catch (error) {
+                console.log('Erreur lors de la requête API :', error);
+            }
+        }
+        deleteEvent();
+    }
 
 
-    const renderEvent = ({ item }) => { 
+    const renderEvent = ({ item, index }) => {
         return (
-            <View style={styles.itemList}>
+            <View style={styles.itemList} key={index}>
                 <Text>
                     {item.title}
                 </Text>
                 <IconButton
-      icon={() => <Icon name="info-circle" size={20} color="blue" />}
-      onPress={() => detail(item)}
+                    icon={() => <Icon name="info-circle" size={20} color="blue" />}
+                    onPress={() => detail(item)}
                 />
                 <IconButton
-      icon={() => <Icon name="edit" size={20} color="green" />}
-                          onPress={() => edit(item)}/>
+                    icon={() => <Icon name="edit" size={20} color="green" />}
+                    onPress={() => edit(item)} />
                 <IconButton
                     icon={() => <Icon name="trash" size={20} color="black" />}
-                    onPress={() => supprimer(item.id)}/>
+                    onPress={() => supprimer(item.id)} />
             </View>
         )
-    } 
+    }
     return (
         <View style={styles.container}>
             <FlatList
                 data={allEvent}
                 renderItem={renderEvent}
-/>                
-
-<TouchableOpacity style={styles.addButton} onPress={ajouter}>
-        <Text style={styles.addButtonLabel}>+</Text>
-      </TouchableOpacity>
-
+            />
+            <TouchableOpacity style={styles.addButton} onPress={ajouter}>
+                <Text style={styles.addButtonLabel}>+</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -123,21 +122,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        },
-        addButton: {
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: 'blue',
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-          addButtonLabel: {
-            fontSize: 30,
-            color: 'white',
-            fontWeight: 'bold',
-          },
-    })
+    },
+    addButton: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'blue',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    addButtonLabel: {
+        fontSize: 30,
+        color: 'white',
+        fontWeight: 'bold',
+    },
+})
