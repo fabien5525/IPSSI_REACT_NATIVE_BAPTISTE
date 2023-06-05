@@ -1,5 +1,5 @@
-import { verify, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import { verify, JwtPayload } from 'jsonwebtoken';
 import { sign } from 'jsonwebtoken';
 import { secret } from '../config/config.json';
 import User from './database/models/User';
