@@ -8,34 +8,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function GestionEvent({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
-    const [allEvent, setEvent] = useState(
-        [
-            {
-                id: 1,
-                type: 'determiner',
-                title: 'la Baguette',
-                description: 'Rencontre avec un marchand qui vend des baguette de pain',
-                niveau: 1,
-            },
-            {
-                id: 2,
-                type: 'determiner',
-                title: 'Combat contre le Dieu Eternelle des Abysse',
-                description: `Vous venez d'avoir votre baguette de pain, vous vous retrouvez face au Dieu Eternelle des Abysse, il vous attaque avec son attaque ultime, vous avez 2 choix, soit vous l'attaquez avec votre baguette de pain, soit vous vous enfuyez`,
-                niveau: 2,
-            },
-            
-        ])
+    const [allEvent, setEvent] = useState([])
 
         useEffect(() => {
             const getEvent = async () => {
                 try {
-                    //pass bearer token through the fetch
-                    const token = getEncodedData();
+                    const token = await AsyncStorage.getItem('token');
                     const response = await fetch('http://5525.fr:19001/event', {
                         method: 'GET',
                         headers: {
-                          'Authorization': 'Bearer ' + token,
+                          'Authorization': `Bearer ${token}`,
                         },
                     });
                     const json = await response.json();
@@ -47,20 +29,13 @@ export default function GestionEvent({navigation}) {
             getEvent();
         }, []);
 
-        const getEncodedData = async () => {
-            try {
-              const encodedData = await AsyncStorage.getItem('token');
-              if (encodedData !== null) {
-                // La valeur existe, vous pouvez la traiter
-                console.log(encodedData);
-              } else {
-                // La valeur n'existe pas
-                console.log('Aucune valeur stockée avec la clé "token"');
-              }
-            } catch (error) {
-              console.log('Erreur lors de la récupération des données :', error);
-            }
-          };
+       
+
+        useEffect(() => {
+            console.log(allEvent); // Vérifier la valeur initiale de allEvent
+          }, [allEvent]); 
+
+          
 const ajouter = () => {
     navigation.navigate('Ajouter')
           };
